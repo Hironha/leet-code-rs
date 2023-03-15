@@ -21,15 +21,20 @@ pub fn functional_longest_common_prefix(input: &[String]) -> String {
         .unwrap()
 }
 
-
 // slower than functional approach, probably because of format!() logic
 pub fn procedural_longest_common_prefix(input: &[String]) -> String {
+    if input.is_empty() {
+        return String::new();
+    }
+
+    let test_word = input.first().unwrap();
     let mut common_prefix = String::from("");
-    let default_word = String::from("");
-    let test_word = input.first().unwrap_or(&default_word);
 
     for char in test_word.chars() {
-        if input.iter().all(|str| str.starts_with(&format!("{}{}", common_prefix, char))) {
+        let test_prefix = format!("{}{}", common_prefix, char);
+        
+        // checks if all strings starts with same prefix
+        if input.iter().all(|str| str.starts_with(&test_prefix)) {
             common_prefix.push(char);
         } else {
             return common_prefix;
@@ -38,7 +43,6 @@ pub fn procedural_longest_common_prefix(input: &[String]) -> String {
 
     common_prefix
 }
-
 
 #[cfg(test)]
 mod tests {
