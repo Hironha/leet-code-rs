@@ -24,7 +24,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn expect_built_in_sucess() {
+    fn expect_built_in_success() {
         let mut input1: Vec<i32> = vec![1, 1, 2];
         let expect1: Vec<i32> = vec![1, 2];
 
