@@ -37,6 +37,41 @@ pub fn add_binary(a: String, mut b: String) -> String {
     sum.iter().rev().collect::<String>()
 }
 
+pub fn add_binary_with_format(a: String, b: String) -> String {
+    if a.len() != b.len() {
+        let pad = a.len().max(b.len());
+        let padded_a = format!("{:0>pad$}", a);
+        let padded_b = format!("{:0>pad$}", b);
+        return add_binary(padded_a, padded_b);
+    }
+
+    let mut carry = false;
+    let mut sum: Vec<char> = Vec::new();
+    for (i, b_char) in b.chars().rev().enumerate() {
+        let a_char = a.chars().rev().nth(i).unwrap();
+        let value = match (a_char, b_char, carry) {
+            ('0', '0', false) => '0',
+            ('0', '0', true) => {
+                carry = false;
+                '1'
+            }
+            ('1', '0', false) | ('0', '1', false) => '1',
+            ('1', '0', true) | ('0', '1', true) => '0',
+            ('1', '1', false) => {
+                carry = true;
+                '0'
+            }
+            ('1', '1', true) => '1',
+            _ => '0',
+        };
+        sum.push(value);
+    }
+    if carry {
+        sum.push('1');
+    }
+    sum.iter().rev().collect::<String>()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
