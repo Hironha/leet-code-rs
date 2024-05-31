@@ -1,5 +1,7 @@
 // this is basically wagner fischer levenshtein algorithm, but using
 // dynamic allocating the matrix
+// Time complexity: O(m * n)
+// Space complexity: O(m)
 pub fn edit_distance(left: &str, right: &str) -> usize {
     if left.is_empty() || right.is_empty() {
         return left.len().max(right.len());

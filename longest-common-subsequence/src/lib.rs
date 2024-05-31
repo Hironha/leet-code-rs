@@ -38,14 +38,17 @@ fn recursive_lcs(left: &[char], right: &[char]) -> usize {
 // Space complexity: O(m)
 fn dynamic_lcs(left: &[char], right: &[char]) -> usize {
     let size = right.len() + 1;
+    // fill first row with 0, since lcs of empty string with a string is always 0
     let mut prev = vec![0; size];
     let mut curr = prev.clone();
 
     for i in 1..left.len() + 1 {
         for j in 1..size {
             if left[i - 1] == right[j - 1] {
+                // get previous lcs solution and add 1, since it's equal
                 curr[j] = 1 + prev[j - 1];
             } else {
+                // get the max lcs of previous subproblems
                 curr[j] = prev[j].max(curr[j - 1]);
             }
         }
