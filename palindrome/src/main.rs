@@ -12,6 +12,16 @@ mod palindrome {
     }
 }
 
+fn main() {
+    let num: i32 = 1234554321;
+
+    println!(
+        "number: {} is palindrome? {}",
+        num,
+        palindrome::is_palindrome(num)
+    );
+}
+
 #[cfg(test)]
 mod palindrome_test {
     use super::palindrome;
@@ -37,10 +47,4 @@ mod palindrome_test {
         assert!(!palindrome::is_palindrome(num_2));
         assert!(!palindrome::is_palindrome(num_3));
     }
-}
-
-fn main() {
-    let num: i32 = 1234554321;
-
-    println!("number: {} is palindrome? {}", num, palindrome::is_palindrome(num));
 }

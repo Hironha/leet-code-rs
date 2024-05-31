@@ -31,8 +31,14 @@ mod roman {
     }
 }
 
+fn main() {
+    let roman = String::from("XIII");
+
+    assert_eq!(roman::roman_to_int(roman), 13);
+}
+
 #[cfg(test)]
-mod roman_test {
+mod tests {
     use super::roman;
 
     #[test]
@@ -43,10 +49,4 @@ mod roman_test {
         let r_1234 = String::from("MCCXXXIV");
         assert_eq!(roman::roman_to_int(r_1234), 1234);
     }
-}
-
-fn main() {
-    let roman = String::from("XIII");
-
-    assert_eq!(roman::roman_to_int(roman), 13);
 }
