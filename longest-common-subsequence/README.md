@@ -1,8 +1,4 @@
-## Longest Common Subsequence
-
-Many solutions with different complexities for the **Longest Common Subsequence** problem. The problem definition can be found in [Leet Code](https://leetcode.com/problems/longest-common-subsequence/).
-
-## Problem
+## [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
 
 Given two strings `text1` and `text2`, return the length of their longest common subsequence. If there is no common subsequence, return `0`.
 
@@ -34,3 +30,7 @@ Constraints:
 
 - `1 <= text1.length, text2.length <= 1000`
 - `text1` and `text2` consist of only lowercase English characters.
+
+## Notes
+
+I implemented 2 solutions with different complexities for the **Longest Common Subsequence** problem. The idea is simillar to the _Levenshtein Distance_ algorithm, since they both use tabulation with 2D matrix.

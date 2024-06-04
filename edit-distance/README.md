@@ -1,8 +1,4 @@
-## Edit Distance
-
-This problem is basically asking to implement the levenshtein algorithm. To solve efficiently, it's necessary to use 2D dynamic programming (tabulation) with a bottom-up approach. This problems can be found in [Leet Code](https://leetcode.com/problems/edit-distance/description/).
-
-## Problem
+## [Edit Distance](https://leetcode.com/problems/edit-distance/description/)
 
 Given two strings `word1` and `word2`, return the minimum number of operations required to convert `word1` to `word2`.
 
@@ -36,3 +32,7 @@ Constraints:
 
 - `0 <= word1.length, word2.length <= 500`
 - `word1` and `word2` consist of lowercase English letters.
+
+## Notes
+
+This problem is basically asking to implement the _Levenshtein Distance_ algorithm. To solve efficiently, it's necessary to use 2D dynamic programming (tabulation) with a bottom-up approach. It's also possible to solve using a matrix, but it uses more memory, since it requires to allocate the whole matrix.
