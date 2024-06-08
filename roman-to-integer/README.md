@@ -51,3 +51,6 @@ To solve this problem, all we need to do is to iterate the roman numerals in rev
 `MCMXCIV == M + (M - C) + (C - X) + (V - I) == M - C + M - X + C - I + V`
 
 And if we take the last expression, we get the algorithm described above.
+
+- Time Complexity: O(n)
+- Space Complexity: O(1)
