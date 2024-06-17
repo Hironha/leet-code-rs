@@ -1,21 +1,84 @@
-pub fn remove_element(numbers: &mut Vec<i32>, val: i32) -> usize {
-    numbers.retain(|num| *num != val);
-    numbers.len()
+// using built-in `Vec::retain` method
+pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
+    nums.retain(|num| *num != val);
+    nums.len() as i32
+}
+
+pub fn remove_element_raw(nums: &mut [i32], val: i32) -> i32 {
+    let mut k = 0usize;
+    for i in 0..nums.len() {
+        if nums[i] != val {
+            nums[k] = nums[i];
+            k += 1;
+        }
+    }
+
+    i32::try_from(k).unwrap_or(0)
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    fn validate(nums: &[i32], expected: &[i32]) -> bool {
+        if nums.len() != expected.len() {
+            return false;
+        }
 
-    #[test]
-    fn expect_success() {
-        let mut input_1: Vec<i32> = vec![1, 2, 3];
-        assert_eq!(remove_element(&mut input_1, 3), 2);
+        nums.iter()
+            .zip(expected.iter())
+            .all(|(left, right)| left == right)
+    }
 
-        let mut input_2: Vec<i32> = vec![1, 2, 2, 3];
-        assert_eq!(remove_element(&mut input_2, 2), 2);
+    mod builtin {
+        use super::validate;
+        use crate::remove_element;
 
-        let mut input_3: Vec<i32> = vec![0, 1, 2, 2, 3, 0, 4, 2];
-        assert_eq!(remove_element(&mut input_3, 2), 5);
+        #[test]
+        fn case1() {
+            let mut nums = vec![3, 2, 2, 3];
+            let k = remove_element(&mut nums, 3);
+            let expected = &mut nums[0..usize::try_from(k).unwrap_or(0)];
+            expected.sort();
+
+            assert_eq!(k, 2);
+            assert!(validate(expected, &[2, 2]))
+        }
+
+        #[test]
+        fn case2() {
+            let mut nums = vec![0, 1, 2, 2, 3, 0, 4, 2];
+            let k = remove_element(&mut nums, 2);
+            let expected = &mut nums[0..usize::try_from(k).unwrap_or(0)];
+            expected.sort();
+
+            assert_eq!(k, 5);
+            assert!(validate(expected, &[0, 0, 1, 3, 4]));
+        }
+    }
+
+    mod raw {
+        use super::validate;
+        use crate::remove_element_raw;
+
+        #[test]
+        fn case1() {
+            let mut nums = vec![3, 2, 2, 3];
+            let k = remove_element_raw(&mut nums, 3);
+            let expected = &mut nums[0..usize::try_from(k).unwrap_or(0)];
+            expected.sort();
+
+            assert_eq!(k, 2);
+            assert!(validate(expected, &[2, 2]))
+        }
+
+        #[test]
+        fn case2() {
+            let mut nums = vec![0, 1, 2, 2, 3, 0, 4, 2];
+            let k = remove_element_raw(&mut nums, 2);
+            let expected = &mut nums[0..usize::try_from(k).unwrap_or(0)];
+            expected.sort();
+
+            assert_eq!(k, 5);
+            assert!(validate(expected, &[0, 0, 1, 3, 4]));
+        }
     }
 }
