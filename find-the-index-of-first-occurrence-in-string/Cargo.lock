@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "first-occurrence-in-string"
+name = "find-the-index-of-first-occurrence-in-string"
 version = "0.1.0"
