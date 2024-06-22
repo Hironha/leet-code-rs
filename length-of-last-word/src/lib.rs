@@ -1,46 +1,39 @@
-// high memory usage solution
-pub fn get_last_word_length_1(input: &str) -> usize {
-    match input.split_whitespace().last() {
-        Some(w) => w.len(),
-        None => 0,
-    }
-}
+pub fn length_of_last_word(s: String) -> i32 {
+    let mut length = 0i32;
 
-// low memory usage solution
-pub fn get_last_word_length_2(input: &str) -> usize {
-    input
-        .trim_end()
-        .chars()
-        .rev()
-        .take_while(|c| !c.is_whitespace())
-        .count()
+    for b in s.as_bytes().iter().rev() {
+        match (b.is_ascii_whitespace(), length) {
+            (false, _) => length += 1,
+            (true, l) if l > 0 => return l,
+            _ => (),
+        };
+    }
+
+    length
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::length_of_last_word;
 
     #[test]
-    fn expect_success_method_1() {
-        let input_1 = "my name is hironha".to_string();
-        assert_eq!(get_last_word_length_1(&input_1), 7);
+    fn case1() {
+        let s = String::from("Hello World");
 
-        let input_2 = "madness".to_string();
-        assert_eq!(get_last_word_length_1(&input_2), 7);
-
-        let input_3 = "".to_string();
-        assert_eq!(get_last_word_length_1(&input_3), 0);
+        assert_eq!(length_of_last_word(s), 5);
     }
 
     #[test]
-    fn expect_success_method_2() {
-        let input_1 = "my name is hironha".to_string();
-        assert_eq!(get_last_word_length_2(&input_1), 7);
+    fn case2() {
+        let s = String::from("   fly me   to   the moon  ");
 
-        let input_2 = "madness".to_string();
-        assert_eq!(get_last_word_length_2(&input_2), 7);
+        assert_eq!(length_of_last_word(s), 4);
+    }
 
-        let input_3 = "".to_string();
-        assert_eq!(get_last_word_length_2(&input_3), 0);
+    #[test]
+    fn case3() {
+        let s = String::from("luffy is still joyboy");
+
+        assert_eq!(length_of_last_word(s), 6);
     }
 }
