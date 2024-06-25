@@ -6,10 +6,10 @@ pub fn plus_one(mut digits: Vec<i32>) -> Vec<i32> {
     }
 
     let mut carry = 1i32;
-    let mut idx: i32 = i32::try_from(digits.len() - 1).unwrap_or_default();
+    let mut idx = digits.len();
 
-    while idx >= 0 && carry > 0 {
-        let i = usize::try_from(idx).unwrap_or_default();
+    while idx > 0 && carry > 0 {
+        let i = idx - 1;
         match digits[i] + carry {
             10 => digits[i] = 0,
             sum => {
