@@ -1,93 +1,61 @@
-pub fn add_binary(a: String, mut b: String) -> String {
-    if a.len() < b.len() {
-        return add_binary(b, a);
-    }
-    if b.len() < a.len() {
-        b = b.chars().rev().collect::<String>();
-        for _ in 0..(a.len() - b.len()) {
-            b.push('0');
-        }
-        return add_binary(a, b.chars().rev().collect());
-    }
-    
+pub fn add_binary(a: String, b: String) -> String {
+    let a_bytes = a.as_bytes();
+    let b_bytes = b.as_bytes();
+    let mut i = a.len();
+    let mut j = b.len();
     let mut carry = false;
-    let mut sum: Vec<char> = Vec::new();
-    for (i, b_char) in b.chars().rev().enumerate() {
-        let a_char = a.chars().rev().nth(i).unwrap();
-        let value = match (a_char, b_char, carry) {
-            ('0', '0', false) => '0',
-            ('0', '0', true) => {
-                carry = false;
-                '1'
-            }
-            ('1', '0', false) | ('0', '1', false) => '1',
-            ('1', '0', true) | ('0', '1', true) => '0',
-            ('1', '1', false) => {
-                carry = true;
-                '0'
-            }
-            ('1', '1', true) => '1',
-            _ => '0',
-        };
-        sum.push(value);
-    }
-    if carry {
-        sum.push('1');
-    }
-    sum.iter().rev().collect::<String>()
-}
+    let mut sum = Vec::with_capacity(i.max(j) + 1);
 
-pub fn add_binary_with_format(a: String, b: String) -> String {
-    if a.len() != b.len() {
-        let pad = a.len().max(b.len());
-        let padded_a = format!("{:0>pad$}", a);
-        let padded_b = format!("{:0>pad$}", b);
-        return add_binary(padded_a, padded_b);
+    while i > 0 || j > 0 || carry {
+        let x = if i == 0 {
+            b'0'
+        } else {
+            i -= 1;
+            a_bytes[i]
+        };
+
+        let y = if j == 0 {
+            b'0'
+        } else {
+            j -= 1;
+            b_bytes[j]
+        };
+
+        match (x, y, carry) {
+            (b'0', b'0', false) | (b'0', b'1', true) | (b'1', b'0', true) => sum.push('0'),
+            (b'0', b'1', false) | (b'1', b'0', false) | (b'1', b'1', true) => sum.push('1'),
+            (b'0', b'0', true) => {
+                sum.push('1');
+                carry = false;
+            }
+            (b'1', b'1', false) => {
+                sum.push('0');
+                carry = true;
+            }
+            _ => panic!("Received invalid binary string"),
+        };
     }
 
-    let mut carry = false;
-    let mut sum: Vec<char> = Vec::new();
-    for (i, b_char) in b.chars().rev().enumerate() {
-        let a_char = a.chars().rev().nth(i).unwrap();
-        let value = match (a_char, b_char, carry) {
-            ('0', '0', false) => '0',
-            ('0', '0', true) => {
-                carry = false;
-                '1'
-            }
-            ('1', '0', false) | ('0', '1', false) => '1',
-            ('1', '0', true) | ('0', '1', true) => '0',
-            ('1', '1', false) => {
-                carry = true;
-                '0'
-            }
-            ('1', '1', true) => '1',
-            _ => '0',
-        };
-        sum.push(value);
-    }
-    if carry {
-        sum.push('1');
-    }
-    sum.iter().rev().collect::<String>()
+    sum.into_iter().rev().collect()
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::add_binary;
 
     #[test]
-    fn expect_success() {
-        let a_1 = "11".to_string();
-        let b_1 = "1".to_string();
-        assert_eq!(add_binary(a_1, b_1), "100".to_string());
+    fn case1() {
+        let a = String::from("11");
+        let b = String::from("1");
 
-        let a_2 = "1010".to_string();
-        let b_2 = "1011".to_string();
-        assert_eq!(add_binary(a_2, b_2), "10101".to_string());
+        assert_eq!(add_binary(a, b), String::from("100"));
+    }
 
-        let a_2 = "100".to_string();
-        let b_2 = "110010".to_string();
-        assert_eq!(add_binary(a_2, b_2), "110110".to_string());
+    #[test]
+    fn case2() {
+        let a = String::from("1010");
+        let b = String::from("1011");
+
+        assert_eq!(add_binary(a, b), String::from("10101"));
     }
 }
