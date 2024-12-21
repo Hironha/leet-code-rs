@@ -27,63 +27,23 @@ pub fn add_two_numbers(
     l1: Option<Box<ListNode>>,
     l2: Option<Box<ListNode>>,
 ) -> Option<Box<ListNode>> {
-    let mut header: Option<Box<ListNode>> = None;
+    let mut head: Option<Box<ListNode>> = None;
+    let mut curr = &mut head;
     let mut p1 = l1.as_deref();
     let mut p2 = l2.as_deref();
-    let mut psum = &mut header;
-    let mut carry = 0i32;
-    while p1.is_some() && p2.is_some() {
-        let n1 = p1.unwrap();
-        let n2 = p2.unwrap();
-        let mut val = n1.val + n2.val;
-        if carry > 0 {
-            val += carry;
-            carry = 0;
-        }
 
-        if val >= 10 {
-            val %= 10;
-            carry += 1;
-        }
+    let mut carry = 0;
+    while p1.is_some() || p2.is_some() || carry != 0 {
+        let sum = p1.map_or(0, |x| x.val) + p2.as_ref().map_or(0, |x| x.val) + carry;
+        carry = sum / 10;
 
-        if psum.is_none() {
-            psum.replace(Box::from(ListNode::new(val)));
-        } else {
-            let nsum = psum.as_deref_mut().unwrap();
-            nsum.next = Some(Box::from(ListNode::new(val)));
-            psum = &mut nsum.next;
-        }
-
-        p1 = n1.next.as_deref();
-        p2 = n2.next.as_deref();
+        let sum_node = curr.insert(Box::new(ListNode::new(sum % 10)));
+        curr = &mut sum_node.next;
+        p1 = p1.and_then(|node| node.next.as_deref());
+        p2 = p2.and_then(|node| node.next.as_deref());
     }
 
-    let mut prest = if p1.is_some() { p1 } else { p2 };
-    while prest.is_some() {
-        let nsum = psum.as_deref_mut().unwrap();
-        let nrest = prest.unwrap();
-        let mut val = nrest.val;
-        if carry > 0 {
-            val += carry;
-            carry = 0;
-        }
-
-        if val >= 10 {
-            val %= 10;
-            carry += 1;
-        }
-
-        nsum.next = Some(Box::from(ListNode::new(val)));
-        psum = &mut nsum.next;
-        prest = nrest.next.as_deref();
-    }
-
-    if carry > 0 {
-        let nsum = psum.as_deref_mut().unwrap();
-        nsum.next = Some(Box::from(ListNode::new(carry)));
-    }
-
-    header
+    head
 }
 
 #[cfg(test)]
